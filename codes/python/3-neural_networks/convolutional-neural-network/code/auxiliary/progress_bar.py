@@ -14,7 +14,7 @@ def print_progress(progress, epoch_num, loss):
     """
 
     # Define the length of bar
-    barLength = 30
+    bar_length = 30
 
     # Ceck the input!
     assert type(progress) is float, "id is not a float: %r" % id
@@ -29,10 +29,10 @@ def print_progress(progress, epoch_num, loss):
         status = "\r\n"
 
     # Where we are in the progress!
-    indicator = int(round(barLength*progress))
+    indicator = int(round(bar_length * progress))
 
     # Print the appropriate progress phase!
-    list = [str(epoch_num), "#"*indicator , "-"*(barLength-indicator), progress*100, loss, status]
-    text = "\rEpoch {0[0]} {0[1]} {0[2]} %{0[3]:.2f} loss={0[4]:.3f} {0[5]}".format(list)
+    a_list = [str(epoch_num), "#" * indicator, "-" * (bar_length - indicator), progress * 100, loss, status]
+    text = "\rEpoch {0[0]} {0[1]} {0[2]} %{0[3]:.2f} loss={0[4]:.3f} {0[5]}".format(a_list)
     sys.stdout.write(text)
     sys.stdout.flush()

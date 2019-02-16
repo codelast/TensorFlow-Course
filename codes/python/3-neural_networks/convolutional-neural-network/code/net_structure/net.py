@@ -75,19 +75,18 @@ def net_arg_scope(weight_decay=0.0005, is_training=False):
     """
     if is_training:
         with tf.contrib.framework.arg_scope(
-                [tf.contrib.layers.conv2d],
-                padding='SAME',
-                weights_regularizer=slim.l2_regularizer(weight_decay),
-                weights_initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0, mode='FAN_AVG',
-                                                                                   uniform=False, seed=None,
-                                                                                   dtype=tf.float32),
-                activation_fn=tf.nn.relu) as sc:
+            [tf.contrib.layers.conv2d],
+            padding='SAME',
+            weights_regularizer=slim.l2_regularizer(weight_decay),
+            weights_initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0, mode='FAN_AVG',
+                                                                               uniform=False, seed=None,
+                                                                               dtype=tf.float32),
+            activation_fn=tf.nn.relu) as sc:
             return sc
 
     else:
         with tf.contrib.framework.arg_scope(
-                [tf.contrib.layers.conv2d],
-                padding='SAME',
-                activation_fn=tf.nn.relu) as sc:
+            [tf.contrib.layers.conv2d],
+            padding='SAME',
+            activation_fn=tf.nn.relu) as sc:
             return sc
-

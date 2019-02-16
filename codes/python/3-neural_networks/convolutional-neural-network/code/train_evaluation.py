@@ -1,9 +1,9 @@
 from __future__ import print_function
-import tensorflow as tf
-import numpy as np
-from auxiliary import progress_bar
+
 import os
-import sys
+
+import tensorflow as tf
+from auxiliary import progress_bar
 
 
 def train(**keywords):
@@ -151,7 +151,6 @@ def train(**keywords):
     save_path = keywords['saver'].save(keywords['sess'], os.path.join(keywords['checkpoint_dir'], checkpoint_prefix))
     print("Model saved in file: %s" % save_path)
 
-
     ############################################################################
     ########## Run the session for pur evaluation on the test data #############
     ############################################################################
@@ -170,7 +169,6 @@ def evaluation(**keywords):
     image_place = keywords['tensors']['image_place']
     label_place = keywords['tensors']['label_place']
     dropout_param = keywords['tensors']['dropout_param']
-
 
     # Restoring the saved weights.
     saver.restore(sess, os.path.join(checkpoint_dir, checkpoint_prefix))

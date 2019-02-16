@@ -1,8 +1,9 @@
-import numpy as np
 import collections
 
+import numpy as np
 
-class DATA_OBJECT(object):
+
+class DataObject(object):
     def __init__(self,
                  images,
                  labels,
@@ -98,10 +99,10 @@ def provide_data(mnist):
     test_labels = mnist.test.labels
 
     # Create separate objects for train, validation & test.
-    train = DATA_OBJECT(train_images, train_labels, num_classes=10, one_hot=True, dtype=np.float32, reshape=False)
-    validation = DATA_OBJECT(validation_images, validation_labels, num_classes=10, one_hot=True, dtype=np.float32,
-                             reshape=False)
-    test = DATA_OBJECT(test_images, test_labels, num_classes=10, one_hot=True, dtype=np.float32, reshape=False)
+    train = DataObject(train_images, train_labels, num_classes=10, one_hot=True, dtype=np.float32, reshape=False)
+    validation = DataObject(validation_images, validation_labels, num_classes=10, one_hot=True, dtype=np.float32,
+                            reshape=False)
+    test = DataObject(test_images, test_labels, num_classes=10, one_hot=True, dtype=np.float32, reshape=False)
 
     # Create the whole data object
     DataSetObject = collections.namedtuple('DataSetObject', ['train', 'validation', 'test'])

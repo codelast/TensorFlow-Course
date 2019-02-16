@@ -1,10 +1,7 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-from sklearn import datasets
-from tensorflow.python.framework import ops
-from tensorflow.examples.tutorials.mnist import input_data
 from sklearn.decomposition import PCA
+from tensorflow.examples.tutorials.mnist import input_data
 
 #######################
 ### Necessary Flags ###
@@ -60,10 +57,10 @@ def loss_fn(alpha, label_placeholder):
 
 # Gaussian (RBF) prediction kernel
 def kernel_pred(x_data, prediction_grid):
-    A = tf.reshape(tf.reduce_sum(tf.square(x_data), 1), [-1, 1])
-    B = tf.reshape(tf.reduce_sum(tf.square(prediction_grid), 1), [-1, 1])
-    square_distance = tf.add(tf.subtract(A, tf.multiply(2., tf.matmul(x_data, tf.transpose(prediction_grid)))),
-                             tf.transpose(B))
+    a = tf.reshape(tf.reduce_sum(tf.square(x_data), 1), [-1, 1])
+    b = tf.reshape(tf.reduce_sum(tf.square(prediction_grid), 1), [-1, 1])
+    square_distance = tf.add(tf.subtract(a, tf.multiply(2., tf.matmul(x_data, tf.transpose(prediction_grid)))),
+                             tf.transpose(b))
     return tf.exp(tf.multiply(gamma, tf.abs(square_distance)))
 
 
@@ -71,7 +68,7 @@ def kernel_fn(x_data, gamma):
     """
     This function generates the RBF kernel.
     :param x_data: Input data
-    :param gamma: Hyperparamet.
+    :param gamma: Hyperparameter.
     :return: The RBF kernel.
     """
     square_distance = tf.multiply(2., tf.matmul(x_data, tf.transpose(x_data)))
@@ -94,15 +91,15 @@ def prepare_label_fn(label_onehot):
     return labels
 
 
-def next_batch(X, y, batch_size):
+def next_batch(x, y, batch_size):
     """
     Generating a batch of random data.
     :param x_train:
     :param batch_size:
     :return:
     """
-    idx = np.random.choice(len(X), size=batch_size)
-    X_batch = X[idx]
+    idx = np.random.choice(len(x), size=batch_size)
+    X_batch = x[idx]
     y_batch = y[:, idx]
     return X_batch, y_batch
 
@@ -140,7 +137,7 @@ pca.fit(mnist.train.images)
 print("The variance of the chosen components = %{0:.2f}".format(100 * np.sum(pca.explained_variance_ratio_)))
 x_train = pca.transform(mnist.train.images)
 x_test = pca.transform(mnist.test.images)
-num_fetures = x_train.shape[1]
+num_features = x_train.shape[1]
 
 ############################
 ### Graph & Optimization ###
@@ -149,9 +146,9 @@ num_fetures = x_train.shape[1]
 sess = tf.Session()
 
 # Initialize placeholders
-data_placeholder = tf.placeholder(shape=[None, num_fetures], dtype=tf.float32)
+data_placeholder = tf.placeholder(shape=[None, num_features], dtype=tf.float32)
 label_placeholder = tf.placeholder(shape=[num_classes, None], dtype=tf.float32)
-pred_placeholder = tf.placeholder(shape=[None, num_fetures], dtype=tf.float32)
+pred_placeholder = tf.placeholder(shape=[None, num_features], dtype=tf.float32)
 
 # The alpha variable for solving the dual optimization problem.
 alpha = tf.Variable(tf.random_normal(shape=[num_classes, FLAGS.batch_size]))
@@ -191,14 +188,14 @@ for i in range(FLAGS.num_steps):
     temp_loss = sess.run(loss, feed_dict={data_placeholder: batch_X, label_placeholder: batch_y})
 
     acc_train_batch = sess.run(accuracy, feed_dict={data_placeholder: batch_X,
-                                                   label_placeholder: batch_y,
-                                                   pred_placeholder: batch_X})
+                                                    label_placeholder: batch_y,
+                                                    pred_placeholder: batch_X})
 
     batch_X_test, batch_y_test = next_batch(x_test, y_test, FLAGS.batch_size)
     acc_test_batch = sess.run(accuracy, feed_dict={data_placeholder: batch_X_test,
-                                                  label_placeholder: batch_y_test,
-                                                  pred_placeholder: batch_X_test})
+                                                   label_placeholder: batch_y_test,
+                                                   pred_placeholder: batch_X_test})
 
     if (i + 1) % FLAGS.log_steps == 0:
         print('Step #%d, Loss= %f, training accuracy= %f, testing accuracy= %f ' % (
-            (i+1), temp_loss, acc_train_batch, acc_test_batch))
+            (i + 1), temp_loss, acc_train_batch, acc_test_batch))

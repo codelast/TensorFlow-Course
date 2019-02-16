@@ -61,7 +61,7 @@ tf.app.flags.DEFINE_boolean('allow_soft_placement', True,
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             'Demonstrate which variables are on what device.')
 
-# Store all elemnts in FLAG structure!
+# Store all elements in FLAG structure!
 FLAGS = tf.app.flags.FLAGS
 
 
@@ -179,7 +179,7 @@ with graph.as_default():
     ###############################################
 
     # Image summaries(draw three random images from data in both training and testing phases)
-    # The image summaries is only cerated for train summaries and it get three random images from the training set.
+    # The image summaries is only created for train summaries and it get three random images from the training set.
     arr = np.random.randint(data.train.images.shape[0], size=(3,))
     tf.summary.image('images', data.train.images[arr], max_outputs=3,
                      collections=['per_epoch_train'])

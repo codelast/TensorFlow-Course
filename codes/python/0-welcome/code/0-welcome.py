@@ -6,9 +6,10 @@
 # The TensorFlow flags are used for having a more user friendly environment.
 
 from __future__ import print_function
-import tensorflow as tf
+
 import os
 
+import tensorflow as tf
 
 ######################################
 ######### Necessary Flags ############
@@ -31,5 +32,3 @@ with tf.Session() as sess:
 # Closing the writer.
 writer.close()
 sess.close()
-
-

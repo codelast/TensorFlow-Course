@@ -1,10 +1,8 @@
-import matplotlib.pyplot as plt
+import sys
+
 import numpy as np
 import tensorflow as tf
 from sklearn import datasets
-import random
-import sys
-
 
 #######################
 ### Necessary Flags ###
@@ -42,23 +40,26 @@ FLAGS = tf.app.flags.FLAGS
 ### Required Functions ###
 ##########################
 
-def loss_fn(W,b,x_data,y_target):
-    logits = tf.subtract(tf.matmul(x_data, W),b)
-    norm_term = tf.divide(tf.reduce_sum(tf.multiply(tf.transpose(W),W)),2)
+def loss_fn(w, b, x_data, y_target):
+    logits = tf.subtract(tf.matmul(x_data, w), b)
+    norm_term = tf.divide(tf.reduce_sum(tf.multiply(tf.transpose(w), w)), 2)
     classification_loss = tf.reduce_mean(tf.maximum(0., tf.subtract(FLAGS.delta, tf.multiply(logits, y_target))))
-    total_loss = tf.add(tf.multiply(FLAGS.C_param,classification_loss), tf.multiply(FLAGS.Reg_param,norm_term))
+    total_loss = tf.add(tf.multiply(FLAGS.C_param, classification_loss), tf.multiply(FLAGS.Reg_param, norm_term))
     return total_loss
 
-def inference_fn(W,b,x_data,y_target):
-    prediction = tf.sign(tf.subtract(tf.matmul(x_data, W), b))
+
+def inference_fn(w, b, x_data, y_target):
+    prediction = tf.sign(tf.subtract(tf.matmul(x_data, w), b))
     accuracy = tf.reduce_mean(tf.cast(tf.equal(prediction, y_target), tf.float32))
     return accuracy
 
-def next_batch_fn(x_train,y_train,num_samples=FLAGS.batch_size):
+
+def next_batch_fn(x_train, y_train, num_samples=FLAGS.batch_size):
     index = np.random.choice(len(x_train), size=num_samples)
     X_batch = x_train[index]
     y_batch = np.transpose([y_train[index]])
     return X_batch, y_batch
+
 
 ##########################
 ### Dataset peparation ###
@@ -71,7 +72,7 @@ iris = datasets.load_iris()
 X = iris.data[:, :2]
 
 # The labels are transformed to -1 and 1.
-y = np.array([1 if label==0 else -1 for label in iris.target])
+y = np.array([1 if label == 0 else -1 for label in iris.target])
 
 # Get the indices for train and test sets.
 my_randoms = np.random.choice(X.shape[0], X.shape[0], replace=False)
@@ -90,8 +91,8 @@ y_test = y[test_indices]
 
 x_data = tf.placeholder(shape=[None, X.shape[1]], dtype=tf.float32)
 y_target = tf.placeholder(shape=[None, 1], dtype=tf.float32)
-W = tf.Variable(tf.random_normal(shape=[X.shape[1],1]))
-b = tf.Variable(tf.random_normal(shape=[1,1]))
+W = tf.Variable(tf.random_normal(shape=[X.shape[1], 1]))
+b = tf.Variable(tf.random_normal(shape=[1, 1]))
 
 # Calculation of loss and accuracy.
 total_loss = loss_fn(W, b, x_data, y_target)
@@ -127,7 +128,8 @@ for step_idx in range(FLAGS.num_steps):
 
     # Displaying the desired values.
     if step_idx % 100 == 0:
-        print('Step #%d, training accuracy= %% %.2f, testing accuracy= %% %.2f ' % (step_idx, float(100 * train_acc_step), float(100 * test_acc_step)))
+        print('Step #%d, training accuracy= %% %.2f, testing accuracy= %% %.2f ' % (
+        step_idx, float(100 * train_acc_step), float(100 * test_acc_step)))
 
 if FLAGS.is_evaluation:
     [[w1], [w2]] = sess.run(W)
@@ -136,7 +138,7 @@ if FLAGS.is_evaluation:
 
     # Find the separator line.
     line = []
-    line = [-w2/w1*i+bias/w1 for i in x_line]
+    line = [-w2 / w1 * i + bias / w1 for i in x_line]
 
     # coor_pos_list = [positive_X, positive_y]
     # coor_neg_list = [negative_X, negative_y]
@@ -150,7 +152,7 @@ if FLAGS.is_evaluation:
             negative_y = data[0]
         else:
             sys.exit("Invalid label!")
-    
+
     # # uncomment if plotting is desired!
     # # Plotting the SVM decision boundary.
     # plt.plot(positive_X, positive_y, '+', label='Positive')
@@ -159,9 +161,3 @@ if FLAGS.is_evaluation:
     # plt.legend(loc='best')
     # plt.title('Linear SVM')
     # plt.show()
-
-
-
-
-
-

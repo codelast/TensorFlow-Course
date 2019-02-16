@@ -58,7 +58,7 @@ tf.app.flags.DEFINE_boolean('allow_soft_placement', True,
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             'Demonstrate which variables are on what device.')
 
-# Store all elemnts in FLAG structure!
+# Store all elements in FLAG structure!
 FLAGS = tf.app.flags.FLAGS
 
 ################################################

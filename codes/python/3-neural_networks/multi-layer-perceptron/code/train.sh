@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # Run training.
 python train_mlp.py \

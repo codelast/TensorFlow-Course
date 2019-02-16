@@ -1,8 +1,10 @@
 from __future__ import print_function
-from tensorflow.examples.tutorials.mnist import input_data
-import tensorflow as tf
-import numpy as np
+
 import os
+
+import numpy as np
+import tensorflow as tf
+from tensorflow.examples.tutorials.mnist import input_data
 
 ######################################
 ######### Necessary Flags ############
@@ -58,7 +60,7 @@ tf.app.flags.DEFINE_boolean('allow_soft_placement', True,
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             'Demonstrate which variables are on what device.')
 
-# Store all elemnts in FLAG structure!
+# Store all elements in FLAG structure!
 FLAGS = tf.app.flags.FLAGS
 
 ################################################
@@ -273,8 +275,7 @@ with graph.as_default():
                 ########## Plot the progressive bar #############
                 #################################################
 
-            print("Epoch #" + str(epoch + 1) + ", Train Loss=" + \
-                  "{:.3f}".format(batch_loss))
+            print("Epoch #" + str(epoch + 1) + ", Train Loss={:.3f}".format(batch_loss))
 
             #####################################################
             ########## Evaluation on the test data #############
@@ -289,8 +290,7 @@ with graph.as_default():
                     feed_dict={image_place: test_data,
                                label_place: test_label,
                                dropout_param: 1.})
-                print("Test Accuracy= " + \
-                      "{:.4f}".format(test_accuracy_epoch))
+                print("Test Accuracy={:.4f}".format(test_accuracy_epoch))
 
                 ###########################################################
                 ########## Write the summaries for test phase #############

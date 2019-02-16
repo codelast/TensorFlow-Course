@@ -1,12 +1,13 @@
 from __future__ import print_function
-from tensorflow.examples.tutorials.mnist import input_data
-import tensorflow as tf
-import numpy as np
-from net_structure import net
-from input_function import input
-from auxiliary import progress_bar
+
 import os
-import sys
+
+import numpy as np
+import tensorflow as tf
+from auxiliary import progress_bar
+from input_function import input
+from net_structure import net
+from tensorflow.examples.tutorials.mnist import input_data
 
 ######################################
 ######### Necessary Flags ############
@@ -38,7 +39,7 @@ tf.app.flags.DEFINE_boolean('allow_soft_placement', True,
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             'Demonstrate which variables are on what device.')
 
-# Store all elemnts in FLAG structure!
+# Store all elements in FLAG structure!
 FLAGS = tf.app.flags.FLAGS
 
 ################################################
@@ -105,8 +106,8 @@ with graph.as_default():
     joint_arg_scope = net.net_arg_scope(weight_decay=0.0005, is_training=FLAGS.is_training)
     with tf.contrib.framework.arg_scope(joint_arg_scope):
         logits_features, end_points = net.net_architecture(image_place, num_classes=FLAGS.num_classes,
-                                                  dropout_keep_prob=dropout_parameter,
-                                                  is_training=FLAGS.is_training)
+                                                           dropout_keep_prob=dropout_parameter,
+                                                           is_training=FLAGS.is_training)
 
     # Define loss
     with tf.name_scope('loss'):
@@ -125,12 +126,12 @@ with graph.as_default():
     ###############################################
 
     # Image summaries(draw three random images from data in both training and testing phases)
-    # The image summaries is only cerated for train summaries and it get three random images from the training set.
+    # The image summaries is only created for train summaries and it get three random images from the training set.
     arr = np.random.randint(data.test.images.shape[0], size=(3,))
     tf.summary.image('images', data.test.images[arr], max_outputs=3,
                      collections=['per_epoch_train'])
 
-    # Histogram and scalar summaries sammaries
+    # Histogram and scalar summaries summaries
     # sparsity: This summary is the fraction of zero activation for the output of each layer!
     # activations: This summary is the histogram of activation for the output of each layer!
     # WARNING: tf.summary.histogram can be very time consuming so it will be calculated per epoch!
@@ -238,10 +239,8 @@ with graph.as_default():
             progress = float(batch_num + 1) / total_batch_test
             progress_bar.print_progress(progress, epoch_num=1, loss=batch_loss)
 
-
         ######################################################################
         ########## Calculate the accuracy for the whole test set #############
         ######################################################################
         test_accuracy_total = test_accuracy / float(total_batch_test)
-        print("Testing Accuracy= " + \
-              "{:.5f}".format(test_accuracy_total))
+        print("Testing Accuracy={:.5f}".format(test_accuracy_total))

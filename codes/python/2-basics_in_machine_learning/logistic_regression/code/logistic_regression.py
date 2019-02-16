@@ -1,10 +1,7 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import tensorflow as tf
-import tempfile
-import urllib
-import pandas as pd
 import os
+
+import numpy as np
+import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
 ######################################
@@ -61,9 +58,8 @@ tf.app.flags.DEFINE_boolean('allow_soft_placement', True,
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             'Demonstrate which variables are on what device.')
 
-# Store all elemnts in FLAG structure!
+# Store all elements in FLAG structure!
 FLAGS = tf.app.flags.FLAGS
-
 
 ################################################
 ################# handling errors!##############
@@ -83,14 +79,13 @@ mnist = input_data.read_data_sets("MNIST_data/", reshape=True, one_hot=False)
 ### Data Processing ####
 ########################
 # Organize the data and feed it to associated dictionaries.
-data={}
+data = {'train/image': mnist.train.images,
+        'train/label': mnist.train.labels,
+        'test/image': mnist.test.images,
+        'test/label': mnist.test.labels}
 
-data['train/image'] = mnist.train.images
-data['train/label'] = mnist.train.labels
-data['test/image'] = mnist.test.images
-data['test/label'] = mnist.test.labels
 
-def extract_samples_Fn(data):
+def extract_samples_fn(data):
     index_list = []
     for sample_index in range(data.shape[0]):
         label = data[sample_index]
@@ -100,11 +95,10 @@ def extract_samples_Fn(data):
 
 
 # Get only the samples with zero and one label for training.
-index_list_train = extract_samples_Fn(data['train/label'])
-
+index_list_train = extract_samples_fn(data['train/label'])
 
 # Get only the samples with zero and one label for test set.
-index_list_test = extract_samples_Fn(data['test/label'])
+index_list_test = extract_samples_fn(data['test/label'])
 
 # Reform the train data structure.
 data['train/image'] = mnist.train.images[index_list_train]
@@ -148,7 +142,7 @@ with graph.as_default():
     ########### Defining place holders ############
     ###############################################
     image_place = tf.placeholder(tf.float32, shape=([None, num_features]), name='image')
-    label_place = tf.placeholder(tf.int32, shape=([None,]), name='gt')
+    label_place = tf.placeholder(tf.int32, shape=([None, ]), name='gt')
     label_one_hot = tf.one_hot(label_place, depth=FLAGS.num_classes, axis=-1)
     dropout_param = tf.placeholder(tf.float32)
 
@@ -156,7 +150,7 @@ with graph.as_default():
     ########### Model + Loss + Accuracy ##############
     ##################################################
     # A simple fully connected with two class and a softmax is equivalent to Logistic Regression.
-    logits = tf.contrib.layers.fully_connected(inputs=image_place, num_outputs = FLAGS.num_classes, scope='fc')
+    logits = tf.contrib.layers.fully_connected(inputs=image_place, num_outputs=FLAGS.num_classes, scope='fc')
 
     # Define loss
     with tf.name_scope('loss'):
@@ -185,7 +179,6 @@ with graph.as_default():
     with tf.name_scope('train_op'):
         gradients_and_variables = optimizer.compute_gradients(loss_tensor)
         train_op = optimizer.apply_gradients(gradients_and_variables, global_step=global_step)
-
 
     ############################################
     ############ Run the Session ###############
@@ -231,7 +224,7 @@ with graph.as_default():
 
                 # Fit training using batch data
                 train_batch_data, train_batch_label = data['train/image'][start_idx:end_idx], data['train/label'][
-                                                                                             start_idx:end_idx]
+                                                                                              start_idx:end_idx]
 
                 ########################################
                 ########## Run the session #############
@@ -250,13 +243,11 @@ with graph.as_default():
                 ########## Write summaries #############
                 ########################################
 
-
                 #################################################
                 ########## Plot the progressive bar #############
                 #################################################
 
-            print("Epoch " + str(epoch + 1) + ", Training Loss= " + \
-                  "{:.5f}".format(batch_loss))
+            print("Epoch " + str(epoch + 1) + ", Training Loss= " + "{:.5f}".format(batch_loss))
 
         ###########################################################
         ############ Saving the model checkpoint ##################

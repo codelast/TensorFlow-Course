@@ -1,3 +1,4 @@
+#!/bin/bash
 # Where the logs will be saved to.
 train_dir=/home/sina/GITHUB/Tensorflow-Turorials/NeuralNetworks/convolutional-neural-network/code/train_logs
 

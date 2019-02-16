@@ -1,3 +1,4 @@
+#!/bin/bash
 # Where the logs will be saved to.
 test_dir=/home/sina/GITHUB/Tensorflow-Turorials/NeuralNetworks/convolutional-neural-network/code/test_logs
 

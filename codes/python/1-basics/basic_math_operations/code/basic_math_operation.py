@@ -6,9 +6,10 @@
 # The TensorFlow flags are used for having a more user friendly environment.
 
 from __future__ import print_function
-import tensorflow as tf
+
 import os
 
+import tensorflow as tf
 
 ######################################
 ######### Necessary Flags ############
@@ -19,7 +20,7 @@ tf.app.flags.DEFINE_string(
     'log_dir', os.path.dirname(os.path.abspath(__file__)) + '/logs',
     'Directory where event logs are written to.')
 
-# Store all elemnts in FLAG structure!
+# Store all elements in FLAG structure!
 FLAGS = tf.app.flags.FLAGS
 
 ################################################
@@ -31,7 +32,6 @@ FLAGS = tf.app.flags.FLAGS
 #       Example: '~/logs' equals to '/home/username/logs'
 if not os.path.isabs(os.path.expanduser(FLAGS.log_dir)):
     raise ValueError('You must assign absolute path for --log_dir')
-
 
 # Defining some constant values
 a = tf.constant(5.0, name="a")
@@ -52,4 +52,3 @@ with tf.Session() as sess:
 # Closing the writer.
 writer.close()
 sess.close()
-

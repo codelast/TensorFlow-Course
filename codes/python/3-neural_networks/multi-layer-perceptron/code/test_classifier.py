@@ -1,9 +1,10 @@
 from __future__ import print_function
-from tensorflow.examples.tutorials.mnist import input_data
-import tensorflow as tf
-import numpy as np
+
 import os
-import sys
+
+import numpy as np
+import tensorflow as tf
+from tensorflow.examples.tutorials.mnist import input_data
 
 ######################################
 ######### Necessary Flags ############
@@ -35,7 +36,7 @@ tf.app.flags.DEFINE_boolean('allow_soft_placement', True,
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             'Demonstrate which variables are on what device.')
 
-# Store all elemnts in FLAG structure!
+# Store all elements in FLAG structure!
 FLAGS = tf.app.flags.FLAGS
 
 ################################################
@@ -61,7 +62,6 @@ In this part the input must be prepared.
 # It checks and download MNIST if it's not already downloaded then extract it.
 # The 'reshape' is True by default to extract feature vectors but we set it to false to we get the original images.
 mnist = input_data.read_data_sets("MNIST_data/", reshape=True, one_hot=True)
-
 
 # Dimentionality of train
 dimensionality = mnist.train.images.shape
@@ -120,11 +120,10 @@ with graph.as_default():
     ###############################################
 
     # Image summaries(draw three random images from data in both training and testing phases)
-    # The image summaries is only cerated for train summaries and it get three random images from the training set.
+    # The image summaries is only created for train summaries and it get three random images from the training set.
     arr = np.random.randint(mnist.test.images.shape[0], size=(3,))
     tf.summary.image('images', mnist.test.images[arr], max_outputs=3,
                      collections=['per_epoch_train'])
-
 
     # Summaries for loss and accuracy
     tf.summary.scalar("loss", loss, collections=['test'])
@@ -152,7 +151,6 @@ with graph.as_default():
     sess = tf.Session(graph=graph, config=session_conf)
 
     with sess.as_default():
-
         # The saver op.
         saver = tf.train.Saver()
 
@@ -191,7 +189,7 @@ with graph.as_default():
 
             # Fit training using batch data
             test_batch_data, test_batch_label = mnist.test.images[start_idx:end_idx], mnist.test.labels[
-                                                                                     start_idx:end_idx]
+                                                                                      start_idx:end_idx]
 
             ########################################
             ########## Run the session #############
@@ -221,13 +219,11 @@ with graph.as_default():
             ########## Plot the progressive bar #############
             #################################################
 
-            print("Batch " + str(batch_num + 1) + ", Testing Loss= " + \
+            print("Batch " + str(batch_num + 1) + ", Testing Loss= " +
                   "{:.5f}".format(test_batch_accuracy))
-
 
         ######################################################################
         ########## Calculate the accuracy for the whole test set #############
         ######################################################################
         test_accuracy_total = test_accuracy / float(total_batch_test)
-        print("Total Test Accuracy= " + \
-              "{:.5f}".format(test_accuracy_total))
+        print("Total Test Accuracy={:.5f}".format(test_accuracy_total))
