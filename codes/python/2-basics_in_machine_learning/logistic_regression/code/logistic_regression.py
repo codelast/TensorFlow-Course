@@ -247,7 +247,7 @@ with graph.as_default():
                 ########## Plot the progressive bar #############
                 #################################################
 
-            print("Epoch " + str(epoch + 1) + ", Training Loss= " + "{:.5f}".format(batch_loss))
+            print("Epoch " + str(epoch + 1) + ", Training Loss={:.5f}".format(batch_loss))
 
         ###########################################################
         ############ Saving the model checkpoint ##################
